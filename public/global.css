@@ -452,7 +452,7 @@ body.nav-open #burger {
   color: #ffffff;
 }
 
-@media (max-width: 520px) {
+@media (max-width: 768px) {
   .btn-partner__label { display: none; }
   .btn-partner { padding: 0.5rem 0.625rem; }
 }
@@ -699,7 +699,7 @@ body.nav-open #burger {
   text-shadow: 0 1px 14px rgba(0, 0, 0, 0.28);
 }
 
-@media (max-width: 520px) {
+@media (max-width: 768px) {
   .hero__headline-line {
     white-space: normal;
     text-align: center;
