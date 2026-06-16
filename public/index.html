@@ -128,9 +128,8 @@
         aria-controls="sidebar"
       >
         <span class="burger__icon" aria-hidden="true">
-          <span class="burger__line"></span>
-          <span class="burger__line"></span>
-          <span class="burger__line"></span>
+          <span class="burger__line burger__line--top"></span>
+          <span class="burger__line burger__line--bottom"></span>
         </span>
       </button>
     </div>
@@ -212,7 +211,8 @@
             <span class="hero__tag">RÉINVENTER L'ÉVIDENCE</span> ET CRÉER L'OPPORTUNITÉ.
           </h1>
           <p class="hero__chapeau">
-            Chez Ymmea nous ne sommes pas des intermédiaires, ni un énième commercialisateur&nbsp;: nous sommes votre <strong>direction commerciale externalisée VEFA</strong> dédiée à la promotion immobilière et à l'<span class="hero__tag hero__tag--inline">IA immobilière</span>. Intelligence de marché, performance commerciale et innovation pour les professionnels qui façonnent l'avenir de l'immobilier neuf et de la proptech.
+            <span class="hero__chapeau-p">Chez Ymmea nous ne sommes pas des intermédiaires, ni un énième commercialisateur&nbsp;: nous sommes votre <strong>direction commerciale externalisée VEFA</strong> dédiée à la promotion immobilière et à l'<strong>Intelligence Artificielle appliquée à l'immobilier</strong>.</span>
+            <span class="hero__chapeau-p">Intelligence de marché, performance commerciale et innovation pour les professionnels qui façonnent l'avenir de l'immobilier neuf et de la proptech.</span>
           </p>
           <div class="hero__cta">
             <a class="btn btn--primary" href="#contact">
@@ -288,10 +288,15 @@
           </div>
         </div>
 
-        <div class="adn-grid">
+        <div class="adn-section reveal">
+          <div class="adn-section__bg" aria-hidden="true">
+            <img src="photo ville.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async">
+            <div class="adn-section__overlay"></div>
+          </div>
+          <div class="adn-grid">
           <article class="adn-card reveal">
             <h4 class="adn-card__label">IMMERSION</h4>
-            <p class="adn-card__text">Présence physique au cœur de vos locaux. Nous sommes partenaires.</p>
+            <p class="adn-card__text">Présence physique possible. Nous sommes partenaires.</p>
           </article>
           <article class="adn-card reveal reveal-delay-1">
             <h4 class="adn-card__label">INGÉNIOSITÉ</h4>
@@ -301,6 +306,7 @@
             <h4 class="adn-card__label">EXIGENCE</h4>
             <p class="adn-card__text">Du développement à la livraison sans compromis.</p>
           </article>
+          </div>
         </div>
       </div>
     </section>
@@ -567,7 +573,7 @@
               </li>
               <li class="phase-list__item">
                 <p class="phase-list__label">Immersion Décisionnelle</p>
-                <p class="phase-list__desc">Participation aux comités d'engagement, présence au sein de vos bureaux pour une réactivité totale.</p>
+                <p class="phase-list__desc">Collaboration agile et intégrée, adaptée à vos méthodes de travail pour une réactivité optimale, à distance comme en présentiel.</p>
               </li>
               <li class="phase-list__item">
                 <p class="phase-list__label">Arbitrage commercial</p>
@@ -628,24 +634,24 @@
     </section>
 
     <!-- SECTION 5 — CHIFFRES -->
-    <section class="stats" id="chiffres" aria-labelledby="chiffres-title">
+    <section class="stats stats--animated reveal" id="chiffres" aria-labelledby="chiffres-title">
       <div class="container">
         <h2 id="chiffres-title" class="section__title section__title--center reveal">Chiffres clés</h2>
         <span class="accent-line accent-line--center reveal" aria-hidden="true"></span>
         <div class="stats__grid">
-          <div class="stat reveal">
+          <div class="stat">
             <p class="stat__value" data-count="6" data-suffix="">0</p>
             <p class="stat__label">Promoteurs partenaires</p>
           </div>
-          <div class="stat reveal reveal-delay-1">
+          <div class="stat">
             <p class="stat__value" data-count="4" data-suffix="">0</p>
             <p class="stat__label">Collaborateurs</p>
           </div>
-          <div class="stat reveal reveal-delay-2">
+          <div class="stat">
             <p class="stat__value" data-count="56" data-suffix="">0</p>
             <p class="stat__label">Lots commercialisés</p>
           </div>
-          <div class="stat reveal reveal-delay-3">
+          <div class="stat">
             <p class="stat__value" data-count="6" data-suffix="">0</p>
             <p class="stat__label">Programmes immobiliers</p>
           </div>
@@ -659,19 +665,12 @@
         <span class="section__eyebrow reveal">Contact</span>
         <h2 class="section__title section__title--center reveal reveal-delay-1">Prêt à en discuter&nbsp;?</h2>
         <span class="accent-line accent-line--center reveal reveal-delay-1" aria-hidden="true"></span>
-        <p class="section__lead section__lead--center reveal reveal-delay-2">
-          Discutons de votre stratégie commerciale, de l'<strong>écoulement de stock en promotion immobilière</strong> et de la performance de vos futurs lancements en <strong>direction commerciale externalisée VEFA</strong>.
+        <p class="section__lead section__lead--center section__lead--engagement reveal reveal-delay-2">
+          Collaboration agile et intégrée, adaptée à vos méthodes de travail pour une réactivité optimale, à distance comme en présentiel.
         </p>
         <div class="contact__cta-box reveal reveal-delay-3">
-          <address class="contact__address">
-            <span class="contact__address-line contact__address-line--brand">YMMEA</span>
-            <span class="contact__address-line">173 rue de Courcelles</span>
-            <span class="contact__address-line">75017 PARIS</span>
-          </address>
-          <p class="contact__mails">
+          <p class="contact__mail-only">
             <a href="mailto:promoteurs@ymmea.com">promoteurs@ymmea.com</a>
-            <span class="contact__sep" aria-hidden="true">•</span>
-            <a href="mailto:partenaires@ymmea.com">partenaires@ymmea.com</a>
           </p>
         </div>
       </div>
@@ -800,7 +799,7 @@
       });
 
       /* Scroll reveal + accent lines + phase cards */
-      var revealEls = document.querySelectorAll(".reveal, .accent-line, .phase-card, .section-split, .visual-band, .feature-visual");
+      var revealEls = document.querySelectorAll(".reveal, .accent-line, .phase-card, .section-split, .visual-band, .feature-visual, .adn-section, .stats--animated");
 
       if ("IntersectionObserver" in window) {
         var revealObserver = new IntersectionObserver(
