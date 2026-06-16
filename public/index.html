@@ -163,19 +163,6 @@
   <div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
 
   <aside class="sidebar" id="sidebar" aria-label="Navigation principale">
-    <div class="sidebar__toolbar">
-      <button
-        class="burger burger--sidebar"
-        id="sidebar-close"
-        type="button"
-        aria-label="Fermer le menu de navigation"
-      >
-        <span class="burger__icon" aria-hidden="true">
-          <span class="burger__line burger__line--top"></span>
-          <span class="burger__line burger__line--bottom"></span>
-        </span>
-      </button>
-    </div>
     <nav class="sidebar__nav">
       <a class="sidebar__link" href="#hero"><span class="sidebar__link-num">01</span>Accueil</a>
       <a class="sidebar__link" href="#societe"><span class="sidebar__link-num">02</span>Notre Société</a>
@@ -223,7 +210,7 @@
           <h1 class="hero__headline">
             <span class="hero__headline-plate">
               <span class="hero__headline-line hero__headline-line--mark">RÉINVENTER L'ÉVIDENCE</span>
-              <span class="hero__headline-line hero__headline-line--mark">ET CRÉER L'OPPORTUNITÉ.</span>
+              <span class="hero__headline-line hero__headline-line--light">ET CRÉER L'OPPORTUNITÉ.</span>
             </span>
           </h1>
           <p class="hero__chapeau">
@@ -780,7 +767,6 @@
       "use strict";
 
       var burger = document.getElementById("burger");
-      var sidebarClose = document.getElementById("sidebar-close");
       var sidebar = document.getElementById("sidebar");
       var overlay = document.getElementById("nav-overlay");
       var isOpen = false;
@@ -788,7 +774,6 @@
       function setNavState(open) {
         isOpen = open;
         burger.classList.toggle("is-active", open);
-        if (sidebarClose) sidebarClose.classList.toggle("is-active", open);
         sidebar.classList.toggle("is-open", open);
         overlay.classList.toggle("is-visible", open);
         document.body.classList.toggle("nav-open", open);
@@ -801,7 +786,6 @@
       function closeNav() { if (isOpen) setNavState(false); }
 
       burger.addEventListener("click", toggleNav);
-      if (sidebarClose) sidebarClose.addEventListener("click", toggleNav);
       overlay.addEventListener("click", closeNav);
 
       sidebar.querySelectorAll(".sidebar__link, .sidebar__action").forEach(function (link) {

@@ -292,7 +292,7 @@ ul, ol { list-style: none; }
   transform: scale(1.02);
 }
 
-/* Burger — barres rectangulaires premium → croix élastique */
+/* Burger — Premium Circle : rotation 360° → croix fine centrée */
 .burger {
   display: flex;
   align-items: center;
@@ -312,6 +312,11 @@ ul, ol { list-style: none; }
   display: block;
   width: 1.875rem;
   height: 1.125rem;
+  transition: transform 0.65s ease-in-out;
+}
+
+.burger.is-active .burger__icon {
+  transform: rotate(360deg);
 }
 
 .burger__line {
@@ -324,10 +329,11 @@ ul, ol { list-style: none; }
   border-radius: 2px;
   transform-origin: center;
   transition:
-    transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-    top 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-    bottom 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-    background 0.3s ease;
+    transform 0.65s ease-in-out,
+    top 0.65s ease-in-out,
+    bottom 0.65s ease-in-out,
+    height 0.65s ease-in-out,
+    background 0.35s ease;
 }
 
 .burger__line--top {
@@ -338,23 +344,35 @@ ul, ol { list-style: none; }
   bottom: 0;
 }
 
+.burger.is-active .burger__line {
+  height: 1.5px;
+  background: #0f172a;
+}
+
 .burger.is-active .burger__line--top {
   top: 50%;
   bottom: auto;
   transform: translateY(-50%) rotate(45deg);
-  background: #0f172a;
 }
 
 .burger.is-active .burger__line--bottom {
   top: 50%;
   bottom: auto;
   transform: translateY(-50%) rotate(-45deg);
-  background: #0f172a;
 }
 
-body.nav-open .site-header__left .burger {
-  opacity: 0;
-  pointer-events: none;
+/* Menu ouvert : burger fixé au-dessus du panneau (croix toujours visible) */
+body.nav-open #burger {
+  position: fixed;
+  top: calc((var(--header-h) - 3rem) / 2);
+  left: clamp(1rem, 3vw, 2rem);
+  z-index: 9999;
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
 }
 
 /* Buttons — dégradé charte sur tous les CTA */
@@ -443,7 +461,7 @@ body.nav-open .site-header__left .burger {
 .nav-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1040;
+  z-index: 9996;
   background: rgba(15, 23, 42, 0.2);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -458,7 +476,7 @@ body.nav-open .site-header__left .burger {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1060;
+  z-index: 9998;
   display: flex;
   flex-direction: column;
   width: var(--sidebar-w);
@@ -470,28 +488,10 @@ body.nav-open .site-header__left .burger {
   -webkit-backdrop-filter: blur(15px);
   box-shadow: 8px 0 48px -16px rgba(15, 23, 42, 0.2);
   transform: translateX(-100%);
-  transition: transform 0.45s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transition: transform 0.45s ease-in-out;
 }
 
 .sidebar.is-open { transform: translateX(0); }
-
-.sidebar__toolbar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: var(--header-h);
-  padding-inline: clamp(1rem, 3vw, 2rem);
-  border-bottom: 1px solid var(--border-soft);
-  background: #ffffff;
-}
-
-.burger--sidebar {
-  margin-left: 0;
-}
 
 .sidebar__nav {
   display: flex;
@@ -618,7 +618,7 @@ body.nav-open .site-header__left .burger {
 .hero__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(12, 30, 61, 0.4);
+  background: rgba(12, 30, 61, 0.72);
   transition: background 0.5s var(--ease);
 }
 
@@ -674,13 +674,9 @@ body.nav-open .site-header__left .burger {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2em;
+  gap: 0.35em;
   padding: 0;
   margin-inline: auto;
-  background: none;
-  border-radius: 0;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
 }
 
 .hero__headline-line {
@@ -689,19 +685,18 @@ body.nav-open .site-header__left .burger {
 }
 
 .hero__headline-line--mark {
+  display: inline-block;
   color: var(--accent-deep);
-  background: linear-gradient(120deg, #ffffff 0%, #ffffff 100%);
-  background-repeat: no-repeat;
-  background-position: 0 85%;
-  background-size: 100% 40%;
-  padding: 0.05em 0.2em;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  transition: background-size 0.4s var(--ease);
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 0.22em 0.55em;
+  line-height: 1.2;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
-.hero__headline-line--mark:hover {
-  background-size: 100% 48%;
+.hero__headline-line--light {
+  color: #ffffff;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.28);
 }
 
 @media (max-width: 520px) {
