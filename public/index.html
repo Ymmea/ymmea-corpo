@@ -208,7 +208,10 @@
         <div class="hero__content reveal">
           <p class="hero__slogan">L'immobilier avec un temps d'avance.</p>
           <h1 class="hero__headline">
-            <span class="hero__tag">RÉINVENTER L'ÉVIDENCE</span> ET CRÉER L'OPPORTUNITÉ.
+            <span class="hero__headline-plate">
+              <span class="hero__headline-line">RÉINVENTER L'ÉVIDENCE</span>
+              <span class="hero__headline-line">ET CRÉER L'OPPORTUNITÉ.</span>
+            </span>
           </h1>
           <p class="hero__chapeau">
             <span class="hero__chapeau-p">Chez Ymmea nous ne sommes pas des intermédiaires, ni un énième commercialisateur&nbsp;: nous sommes votre <strong>direction commerciale externalisée VEFA</strong> dédiée à la promotion immobilière et à l'<strong>Intelligence Artificielle appliquée à l'immobilier</strong>.</span>
@@ -288,12 +291,7 @@
           </div>
         </div>
 
-        <div class="adn-section reveal">
-          <div class="adn-section__bg" aria-hidden="true">
-            <img src="photo ville.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async">
-            <div class="adn-section__overlay"></div>
-          </div>
-          <div class="adn-grid">
+        <div class="adn-grid">
           <article class="adn-card reveal">
             <h4 class="adn-card__label">IMMERSION</h4>
             <p class="adn-card__text">Présence physique possible. Nous sommes partenaires.</p>
@@ -306,7 +304,6 @@
             <h4 class="adn-card__label">EXIGENCE</h4>
             <p class="adn-card__text">Du développement à la livraison sans compromis.</p>
           </article>
-          </div>
         </div>
       </div>
     </section>
@@ -403,7 +400,7 @@
     <!-- SECTION 4 — MÉTIERS & OFFRE -->
     <section class="section section--muted offer-zone" id="metiers">
       <div class="container">
-        <div class="section-split section-split--reverse reveal">
+        <div class="section-split section-split--offer reveal">
           <div class="section-split__content">
             <span class="section__eyebrow">Notre offre</span>
             <h2 class="section__title section__title--wide">Notre Métier&nbsp;: Externalisation de Direction Commerciale en Promotion Immobilière</h2>
@@ -660,19 +657,20 @@
     </section>
 
     <!-- SECTION 6 — CONTACT -->
-    <section class="section contact" id="contact">
-      <div class="container">
-        <span class="section__eyebrow reveal">Contact</span>
-        <h2 class="section__title section__title--center reveal reveal-delay-1">Prêt à en discuter&nbsp;?</h2>
-        <span class="accent-line accent-line--center reveal reveal-delay-1" aria-hidden="true"></span>
-        <p class="section__lead section__lead--center section__lead--engagement reveal reveal-delay-2">
+    <section class="section contact contact--fond" id="contact">
+      <div class="contact__bg" aria-hidden="true">
+        <img src="photo ville.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async">
+        <div class="contact__overlay"></div>
+      </div>
+      <div class="container contact__inner">
+        <span class="section__eyebrow contact__eyebrow reveal">Contact</span>
+        <h2 class="section__title section__title--contact reveal reveal-delay-1">Prêt à en discuter&nbsp;?</h2>
+        <p class="section__lead section__lead--center section__lead--engagement contact__engagement reveal reveal-delay-2">
           Collaboration agile et intégrée, adaptée à vos méthodes de travail pour une réactivité optimale, à distance comme en présentiel.
         </p>
-        <div class="contact__cta-box reveal reveal-delay-3">
-          <p class="contact__mail-only">
-            <a href="mailto:promoteurs@ymmea.com">promoteurs@ymmea.com</a>
-          </p>
-        </div>
+        <p class="contact__mail-only reveal reveal-delay-3">
+          <a href="mailto:promoteurs@ymmea.com">promoteurs@ymmea.com</a>
+        </p>
       </div>
     </section>
 
@@ -799,7 +797,7 @@
       });
 
       /* Scroll reveal + accent lines + phase cards */
-      var revealEls = document.querySelectorAll(".reveal, .accent-line, .phase-card, .section-split, .visual-band, .feature-visual, .adn-section, .stats--animated");
+      var revealEls = document.querySelectorAll(".reveal, .accent-line, .phase-card, .section-split, .visual-band, .feature-visual, .stats--animated");
 
       if ("IntersectionObserver" in window) {
         var revealObserver = new IntersectionObserver(
