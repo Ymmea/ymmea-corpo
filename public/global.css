@@ -401,7 +401,7 @@ body.nav-open #burger {
   box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
 }
 
-/* Buttons — dégradé charte sur tous les CTA */
+/* Buttons — bleu Ymmea sur tous les CTA pleins */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -413,21 +413,25 @@ body.nav-open #burger {
   letter-spacing: 0.05em;
   text-align: center;
   color: #ffffff;
-  background: var(--ymmea-gradient);
+  background: var(--ymmea-blue);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
-  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), opacity 0.2s;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.2s var(--ease);
 }
 
 .btn:hover {
   transform: scale(1.03);
-  box-shadow: 0 12px 32px -8px rgba(99, 102, 241, 0.45);
-  opacity: 0.96;
+  background: #2563eb;
+  box-shadow: 0 12px 32px -8px rgba(59, 130, 246, 0.45);
 }
 
 .btn--primary {
   color: #ffffff;
-  background: var(--ymmea-gradient);
+  background: var(--ymmea-blue);
+}
+
+.btn--primary:hover {
+  background: #2563eb;
 }
 
 .btn--ghost {
@@ -464,11 +468,12 @@ body.nav-open #burger {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #ffffff !important;
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  background: var(--ymmea-blue);
 }
 
 .btn-partner:hover {
   color: #ffffff;
+  background: #2563eb;
   transform: scale(1.02);
 }
 
@@ -602,13 +607,13 @@ body.nav-open #burger {
 
 .sidebar__action--accent {
   color: #ffffff;
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  background: var(--ymmea-blue);
   border-color: transparent;
 }
 
 .sidebar__action--accent:hover {
   color: #ffffff;
-  background: linear-gradient(135deg, #3174e0 0%, #7a4be8 100%);
+  background: #2563eb;
 }
 
 .sidebar__action-icon {
@@ -1701,7 +1706,7 @@ body.nav-open #burger {
 
 .btn--footer-partner {
   color: #ffffff !important;
-  background: var(--ymmea-gradient);
+  background: var(--ymmea-blue);
   max-width: 100%;
   white-space: normal;
   text-align: center;
