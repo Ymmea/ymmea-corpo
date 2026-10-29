@@ -200,7 +200,7 @@
         <video
           class="hero__video"
           id="hero-bg-video"
-          src="media/spot-pub-ymmea.mp4"
+          src="media/spot-hero-ymmea.mp4"
           poster="fond.jpg"
           muted
           loop
@@ -230,7 +230,7 @@
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </a>
-            <button class="btn btn--ghost btn--ghost-hero" type="button" id="spot-open" aria-haspopup="dialog" aria-controls="spot-modal">
+            <button class="btn btn--ghost btn--ghost-hero" type="button" data-spot-open aria-haspopup="dialog" aria-controls="spot-modal">
               Voir le spot
               <svg class="btn__play" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                 <path d="M4.5 2.8v10.4L13.2 8 4.5 2.8z"/>
@@ -541,6 +541,12 @@
             <span class="section__eyebrow">Vidéo</span>
             <h3 class="feature-visual__title">Ymmea à l’antenne</h3>
             <p class="feature-visual__text">Découvrez notre vision de la direction commerciale externalisée et de l’immobilier PropTech, dans une interview TV courte et concrète.</p>
+            <button class="btn btn--primary btn--sm feature-visual__spot-btn" type="button" data-spot-open aria-haspopup="dialog" aria-controls="spot-modal">
+              Voir le spot pub
+              <svg class="btn__play" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M4.5 2.8v10.4L13.2 8 4.5 2.8z"/>
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -876,7 +882,7 @@
       var heroBgVideo = document.getElementById("hero-bg-video");
       var spotModal = document.getElementById("spot-modal");
       var spotVideo = document.getElementById("spot-video");
-      var spotOpenBtn = document.getElementById("spot-open");
+      var spotOpenBtns = document.querySelectorAll("[data-spot-open]");
       var spotMuteBtn = document.getElementById("spot-mute");
       var spotOpen = false;
       var spotLastFocus = null;
@@ -933,7 +939,9 @@
         }
       }
 
-      if (spotOpenBtn) spotOpenBtn.addEventListener("click", openSpot);
+      spotOpenBtns.forEach(function (btn) {
+        btn.addEventListener("click", openSpot);
+      });
       if (spotMuteBtn) {
         spotMuteBtn.addEventListener("click", function () {
           setSpotMute(!spotVideo.muted);
