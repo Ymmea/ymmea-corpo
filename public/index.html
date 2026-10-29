@@ -197,7 +197,17 @@
     <!-- SECTION 1 — HERO -->
     <section class="hero hero--fond" id="hero">
       <div class="hero__bg" aria-hidden="true">
-        <img src="fond.jpg" alt="" width="1920" height="1080" decoding="async">
+        <video
+          class="hero__video"
+          id="hero-bg-video"
+          src="media/spot-pub-ymmea.mp4"
+          poster="fond.jpg"
+          muted
+          loop
+          playsinline
+          autoplay
+          preload="metadata"
+        ></video>
         <div class="hero__overlay"></div>
       </div>
       <div class="container">
@@ -220,11 +230,53 @@
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </a>
-            <a class="btn btn--ghost btn--ghost-hero" href="#metiers">Découvrir notre expertise</a>
+            <button class="btn btn--ghost btn--ghost-hero" type="button" id="spot-open" aria-haspopup="dialog" aria-controls="spot-modal">
+              Voir le spot
+              <svg class="btn__play" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M4.5 2.8v10.4L13.2 8 4.5 2.8z"/>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
     </section>
+
+    <div class="spot-modal" id="spot-modal" role="dialog" aria-modal="true" aria-labelledby="spot-modal-title" aria-hidden="true" hidden>
+      <div class="spot-modal__backdrop" data-spot-close tabindex="-1"></div>
+      <div class="spot-modal__panel" role="document">
+        <div class="spot-modal__bar">
+          <h2 class="spot-modal__title" id="spot-modal-title">Spot pub YMMEA</h2>
+          <div class="spot-modal__actions">
+            <button class="spot-modal__btn" type="button" id="spot-mute" aria-pressed="true" aria-label="Activer le son">
+              <svg class="spot-modal__icon spot-modal__icon--muted" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M11 5L6 9H3v6h3l5 4V5z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+                <path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+              </svg>
+              <svg class="spot-modal__icon spot-modal__icon--sound" viewBox="0 0 24 24" fill="none" aria-hidden="true" hidden>
+                <path d="M11 5L6 9H3v6h3l5 4V5z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+                <path d="M15.5 8.5a4.5 4.5 0 010 7M18.5 6a8 8 0 010 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+              </svg>
+              <span class="spot-modal__btn-label" data-mute-label>Son</span>
+            </button>
+            <button class="spot-modal__btn spot-modal__btn--close" type="button" data-spot-close aria-label="Fermer">
+              <svg class="spot-modal__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="spot-modal__frame">
+          <video
+            class="spot-modal__video"
+            id="spot-video"
+            src="media/spot-pub-ymmea.mp4"
+            playsinline
+            preload="none"
+            controls
+          ></video>
+        </div>
+      </div>
+    </div>
 
     <!-- SECTION 2 — SOCIÉTÉ -->
     <section class="section section--muted" id="societe">
@@ -811,8 +863,97 @@
       });
 
       document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape") closeNav();
+        if (e.key === "Escape") {
+          if (spotOpen) {
+            closeSpot();
+            return;
+          }
+          closeNav();
+        }
       });
+
+      /* Spot pub — fond hero + modale */
+      var heroBgVideo = document.getElementById("hero-bg-video");
+      var spotModal = document.getElementById("spot-modal");
+      var spotVideo = document.getElementById("spot-video");
+      var spotOpenBtn = document.getElementById("spot-open");
+      var spotMuteBtn = document.getElementById("spot-mute");
+      var spotOpen = false;
+      var spotLastFocus = null;
+
+      function setSpotMute(muted) {
+        if (!spotVideo || !spotMuteBtn) return;
+        spotVideo.muted = muted;
+        spotMuteBtn.setAttribute("aria-pressed", muted ? "true" : "false");
+        spotMuteBtn.setAttribute("aria-label", muted ? "Activer le son" : "Couper le son");
+        var mutedIcon = spotMuteBtn.querySelector(".spot-modal__icon--muted");
+        var soundIcon = spotMuteBtn.querySelector(".spot-modal__icon--sound");
+        var label = spotMuteBtn.querySelector("[data-mute-label]");
+        if (mutedIcon) mutedIcon.hidden = !muted;
+        if (soundIcon) soundIcon.hidden = muted;
+        if (label) label.textContent = muted ? "Son" : "Muet";
+      }
+
+      function openSpot() {
+        if (!spotModal || !spotVideo || spotOpen) return;
+        spotLastFocus = document.activeElement;
+        spotOpen = true;
+        spotModal.hidden = false;
+        spotModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("spot-open");
+        if (heroBgVideo) heroBgVideo.pause();
+        setSpotMute(true);
+        spotVideo.currentTime = 0;
+        var playPromise = spotVideo.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch(function () {});
+        }
+        window.setTimeout(function () {
+          if (spotMuteBtn) spotMuteBtn.focus();
+        }, 0);
+      }
+
+      function closeSpot() {
+        if (!spotModal || !spotOpen) return;
+        spotOpen = false;
+        if (spotVideo) {
+          spotVideo.pause();
+          spotVideo.currentTime = 0;
+        }
+        setSpotMute(true);
+        spotModal.setAttribute("aria-hidden", "true");
+        spotModal.hidden = true;
+        document.body.classList.remove("spot-open");
+        if (heroBgVideo) {
+          var resume = heroBgVideo.play();
+          if (resume && typeof resume.catch === "function") resume.catch(function () {});
+        }
+        if (spotLastFocus && typeof spotLastFocus.focus === "function") {
+          spotLastFocus.focus();
+        }
+      }
+
+      if (spotOpenBtn) spotOpenBtn.addEventListener("click", openSpot);
+      if (spotMuteBtn) {
+        spotMuteBtn.addEventListener("click", function () {
+          setSpotMute(!spotVideo.muted);
+          if (!spotVideo.muted) {
+            var p = spotVideo.play();
+            if (p && typeof p.catch === "function") p.catch(function () {});
+          }
+        });
+      }
+      if (spotModal) {
+        spotModal.querySelectorAll("[data-spot-close]").forEach(function (el) {
+          el.addEventListener("click", closeSpot);
+        });
+      }
+
+      if (heroBgVideo) {
+        heroBgVideo.muted = true;
+        var tryPlay = heroBgVideo.play();
+        if (tryPlay && typeof tryPlay.catch === "function") tryPlay.catch(function () {});
+      }
 
       /* Scroll reveal + accent lines + phase cards */
       var revealEls = document.querySelectorAll(".reveal, .accent-line, .phase-card, .section-split, .visual-band, .feature-visual, .stats--animated");
