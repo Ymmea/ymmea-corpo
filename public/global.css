@@ -277,7 +277,7 @@ ul, ol { list-style: none; }
   -webkit-backdrop-filter: none;
   border-bottom: 1px solid var(--border-soft);
   box-shadow: var(--shadow-header);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .site-header__left {
@@ -392,13 +392,17 @@ body.nav-open #burger {
   position: fixed;
   top: calc((var(--header-h) - 3rem) / 2);
   left: clamp(1rem, 3vw, 2rem);
-  z-index: 9999;
-  display: flex;
+  z-index: 10000;
+  display: flex !important;
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   background: #ffffff;
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.12);
+}
+
+body.nav-open #burger.is-active .burger__line {
+  background: #0f172a;
 }
 
 /* Buttons — bleu Ymmea sur tous les CTA pleins */
@@ -535,6 +539,37 @@ body.nav-open #burger {
 }
 
 .sidebar.is-open { transform: translateX(0); }
+
+.sidebar__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-sm);
+  color: var(--anthracite);
+  background: var(--bg-muted);
+  transition: background var(--t), color var(--t), transform 0.2s var(--ease);
+}
+
+.sidebar__close:hover {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--ymmea-blue);
+}
+
+.sidebar__close:focus-visible {
+  outline: 2px solid var(--ymmea-blue);
+  outline-offset: 2px;
+}
+
+.sidebar__close svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
 
 .sidebar__nav {
   display: flex;
@@ -2012,6 +2047,14 @@ body.spot-open {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.site-footer__social-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
 }
 
 .site-footer__legal {
@@ -2045,6 +2088,275 @@ body.spot-open {
 .site-footer__social-block {
   display: flex;
   flex-direction: column;
+}
+
+/* Note Habiter Ici (après Notre Métier) */
+.habiter-note {
+  margin-top: clamp(2.5rem, 6vw, 3.5rem);
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 1.35rem;
+  background: #ffffff;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 18px 48px -20px rgba(15, 23, 42, 0.18);
+}
+
+.habiter-note__brand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem 1.5rem;
+  padding: 1.5rem clamp(1.35rem, 3.2vw, 2.15rem);
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.habiter-note__logo {
+  display: inline-flex;
+  max-width: 100%;
+}
+
+.habiter-note__logo img {
+  height: clamp(3.25rem, 6.5vw, 4.75rem);
+  width: auto;
+  max-width: min(100%, 26rem);
+}
+
+.habiter-note__brand-tag {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ymmea-blue);
+}
+
+.habiter-note__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(15rem, 0.72fr);
+  gap: clamp(1.75rem, 3.5vw, 2.75rem);
+  align-items: start;
+  padding: clamp(1.5rem, 3.2vw, 2.15rem);
+}
+
+.habiter-note__title {
+  margin: 0 0 0.65rem;
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: var(--anthracite);
+}
+
+.habiter-note__subtitle {
+  margin: 1.35rem 0 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--accent-deep);
+}
+
+.habiter-note__text {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.habiter-note__text + .habiter-note__text,
+.habiter-note__list + .habiter-note__text {
+  margin-top: 0.75rem;
+}
+
+.habiter-note__text--cta {
+  margin-top: 0.85rem;
+  font-size: 0.9375rem;
+  color: var(--anthracite);
+}
+
+.habiter-note__list {
+  margin: 0.55rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.habiter-note__list li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.habiter-note__list li strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.habiter-note__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--ymmea-blue);
+}
+
+.habiter-note__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem 1.25rem;
+  margin: 1.25rem 0 0;
+}
+
+.habiter-note__mail {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--accent-deep);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.35);
+  transition: color var(--t), border-color var(--t);
+}
+
+.habiter-note__mail:hover {
+  color: var(--ymmea-blue);
+  border-bottom-color: var(--ymmea-blue);
+}
+
+/* Carrousel Habiter Ici — format story 9:16 */
+.habiter-carousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.95rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.habiter-carousel__frame {
+  width: min(100%, 22rem);
+  padding: 0.55rem;
+  border-radius: 1.55rem;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(241, 245, 249, 0.9)),
+    #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 22px 44px -24px rgba(12, 30, 61, 0.35);
+}
+
+.habiter-carousel__viewport {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 1.15rem;
+  background: #0c1e3d;
+}
+
+.habiter-carousel__track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.habiter-carousel__slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.55s var(--ease), visibility 0.55s var(--ease);
+}
+
+.habiter-carousel__slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+.habiter-carousel__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.habiter-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.habiter-carousel__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 999px;
+  color: var(--accent-deep);
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 4px 14px -8px rgba(15, 23, 42, 0.25);
+  transition: background var(--t), color var(--t), border-color var(--t), transform 0.2s var(--ease);
+}
+
+.habiter-carousel__btn:hover {
+  color: #fff;
+  background: var(--ymmea-blue);
+  border-color: transparent;
+  transform: translateY(-1px);
+}
+
+.habiter-carousel__btn svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.habiter-carousel__dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.habiter-carousel__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border-radius: 999px;
+  background: #cbd5e1;
+  transition: width 0.25s var(--ease), background 0.25s var(--ease);
+}
+
+.habiter-carousel__dot.is-active {
+  width: 1.25rem;
+  background: var(--ymmea-blue);
+}
+
+@media (max-width: 900px) {
+  .habiter-note__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .habiter-carousel {
+    order: -1;
+  }
+
+  .habiter-carousel__frame {
+    width: min(100%, 20rem);
+  }
 }
 
 @media (max-width: 768px) {
