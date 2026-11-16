@@ -1,10 +1,4 @@
 User-agent: *
 Allow: /
 
-# Pages sans valeur SEO (noindex côté HTML) — laisser crawlables pour dé-indexation
-# /mentions-legales, /politique-confidentialite, /cgu
-
-# Espaces privés hors dépôt corpo (à configurer aussi sur chaque sous-domaine)
-Disallow: /connexion
-
-Sitemap: https://www.ymmea.com/sitemap.xml
+Sitemap: https://ymmea.com/sitemap.xml

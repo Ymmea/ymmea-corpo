@@ -1,14 +1,4 @@
 {
-  "buildCommand": null,
-  "outputDirectory": "public",
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "redirects": [
-    {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "ymmea.com" }],
-      "destination": "https://www.ymmea.com/:path*",
-      "permanent": true
-    }
-  ]
-}
+    "buildCommand": null,
+    "outputDirectory": "public"
+  }
