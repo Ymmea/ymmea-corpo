@@ -1336,14 +1336,17 @@
           return '<div class="actu-post__cover">' + img + "</div>";
         }
 
+        var VISIBLE_POSTS = 6;
+
         function renderPost(post, index) {
           var text = String(post.text || "").trim();
           var long = needsToggle(text);
           var postId = "actu-post-" + (post.id || index);
           var dateLabel = formatDate(post.publishedAt);
+          var extraClass = index >= VISIBLE_POSTS ? " is-extra" : "";
 
           return (
-            '<article class="actu-post reveal' + (index ? " reveal-delay-" + Math.min(index, 3) : "") + '">' +
+            '<article class="actu-post' + extraClass + ' reveal' + (index ? " reveal-delay-" + Math.min(index, 3) : "") + '">' +
               renderCover(post) +
               '<span class="actu-post__rule" aria-hidden="true"></span>' +
               '<div class="actu-post__body">' +
@@ -1365,6 +1368,42 @@
               "</div>" +
             "</article>"
           );
+        }
+
+        function renderMoreButton(hiddenCount) {
+          return (
+            '<div class="actualites__more-wrap">' +
+              '<button class="actualites__more" type="button" data-actu-more aria-expanded="false">' +
+                '<span data-actu-more-label>Voir plus d\'actualités (' + hiddenCount + ')</span>' +
+                '<svg class="actualites__more-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+                  '<path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>' +
+                "</svg>" +
+              "</button>" +
+            "</div>"
+          );
+        }
+
+        function bindMore(root) {
+          var btn = root.querySelector("[data-actu-more]");
+          if (!btn) return;
+          var label = btn.querySelector("[data-actu-more-label]");
+          var hiddenCount = root.querySelectorAll(".actu-post.is-extra").length;
+          btn.addEventListener("click", function () {
+            var open = btn.getAttribute("aria-expanded") === "true";
+            var next = !open;
+            btn.setAttribute("aria-expanded", next ? "true" : "false");
+            root.classList.toggle("is-expanded", next);
+            if (label) {
+              label.textContent = next
+                ? "Réduire les actualités"
+                : ("Voir plus d'actualités (" + hiddenCount + ")");
+            }
+            if (!next) {
+              root.scrollIntoView({ behavior: "smooth", block: "start" });
+            } else {
+              observeReveals(root);
+            }
+          });
         }
 
         function observeReveals(root) {
@@ -1426,9 +1465,14 @@
               list.innerHTML = '<p class="actualites__empty">Aucune actualité pour le moment.</p>';
               return;
             }
-            list.innerHTML = posts.map(renderPost).join("");
+            var html = posts.map(renderPost).join("");
+            if (posts.length > VISIBLE_POSTS) {
+              html += renderMoreButton(posts.length - VISIBLE_POSTS);
+            }
+            list.innerHTML = html;
             bindToggles(list);
             bindVideos(list);
+            bindMore(list);
             observeReveals(list);
           })
           .catch(function () {

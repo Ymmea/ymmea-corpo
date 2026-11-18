@@ -1583,22 +1583,26 @@ body.spot-open {
 }
 
 .phase-card__num {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   color: var(--accent-deep);
 }
 
 .phase-card__title {
-  font-size: 0.9375rem;
-  font-weight: 500;
+  font-size: clamp(1.0625rem, 2vw, 1.1875rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
   color: var(--anthracite);
 }
 
 .phase-card__subtitle {
   width: 100%;
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-secondary);
 }
 
 .phase-list {
@@ -1621,16 +1625,18 @@ body.spot-open {
 }
 
 .phase-list__label {
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   font-weight: 500;
+  line-height: 1.4;
   color: var(--anthracite);
 }
 
 .phase-list__desc {
-  margin-top: 0.25rem;
-  font-size: 0.8125rem;
+  margin-top: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 300;
   line-height: 1.7;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 /* Stats */
@@ -2805,6 +2811,58 @@ body.spot-open {
   font-weight: 300;
   color: var(--text-muted);
   white-space: nowrap;
+}
+
+.actu-post.is-extra {
+  display: none;
+}
+
+.actualites__list.is-expanded .actu-post.is-extra {
+  display: flex;
+}
+
+.actualites__more-wrap {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.35rem;
+}
+
+.actualites__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.7rem 1.25rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  background:
+    linear-gradient(160deg, rgba(59, 130, 246, 0.08), rgba(12, 30, 61, 0.03)),
+    #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--accent-deep);
+  transition: border-color var(--t), color var(--t), background var(--t);
+}
+
+.actualites__more:hover {
+  border-color: var(--ymmea-blue);
+  color: var(--ymmea-blue);
+}
+
+.actualites__more[aria-expanded="true"] {
+  border-color: var(--accent-deep);
+  background: var(--accent-deep);
+  color: #fff;
+}
+
+.actualites__more-icon {
+  width: 1rem;
+  height: 1rem;
+  transition: transform var(--t);
+}
+
+.actualites__more[aria-expanded="true"] .actualites__more-icon {
+  transform: rotate(180deg);
 }
 
 /* Reveal */
