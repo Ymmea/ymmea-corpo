@@ -239,6 +239,70 @@ const posts = items
   .filter((p) => p.text)
   .slice(0, 30);
 
+function pickOg(html, prop) {
+  const re = new RegExp(
+    `property=["']${prop}["']\\s+content=["']([^"']+)["']|content=["']([^"']+)["']\\s+property=["']${prop}["']`,
+    "i"
+  );
+  const m = html.match(re);
+  return decodeXmlEntities((m && (m[1] || m[2])) || "");
+}
+
+function isVideoThumb(url) {
+  return /videocover|playlist\/vid|thumbnail-with-play/i.test(url);
+}
+
+async function enrichMedia(post) {
+  const hasVisual =
+    Array.isArray(post.media) &&
+    post.media.some((m) => m.thumbnail || (m.type === "image" && m.url));
+  if (hasVisual) return post;
+
+  const candidates = [];
+  if (post.urn) {
+    candidates.push(`https://www.linkedin.com/embed/feed/update/${post.urn}`);
+    candidates.push(
+      `https://www.linkedin.com/embed/feed/update/${post.urn}?compact=1`
+    );
+  }
+  if (post.url) candidates.push(post.url);
+
+  for (const url of candidates) {
+    try {
+      const r = await fetch(url, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (compatible; YMMEA-ActualitesBot/1.0)",
+          Accept: "text/html",
+        },
+        redirect: "follow",
+      });
+      if (!r.ok) continue;
+      const html = await r.text();
+      const image = pickOg(html, "og:image");
+      if (!image) continue;
+      const type = isVideoThumb(image) ? "video" : "image";
+      const media = {
+        type,
+        url: type === "image" ? image : post.url || image,
+        thumbnail: image,
+      };
+      if (type === "video" && post.urn) {
+        media.embedUrl = `https://www.linkedin.com/embed/feed/update/${post.urn}?compact=1`;
+      }
+      post.media = [media];
+      return post;
+    } catch {
+      // next candidate
+    }
+  }
+  return post;
+}
+
+console.log(`[update-actualites] Enrichissement images OG…`);
+for (let i = 0; i < posts.length; i++) {
+  posts[i] = await enrichMedia(posts[i]);
+}
+
 const payload = {
   updatedAt: new Date().toISOString(),
   source: "linkedin",

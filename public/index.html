@@ -50,7 +50,7 @@
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="global.css">
   
     <!-- JSON-LD -->
@@ -1273,9 +1273,9 @@
         var list = document.querySelector("[data-actualites-list]");
         if (!list) return;
 
-        var PREVIEW_CHARS = 220;
+        var PREVIEW_CHARS = 160;
         var ymmeaIcon =
-          '<img class="actu-post__brand-logo" src="ymmea-logo.png" alt="" width="28" height="28" loading="lazy" decoding="async">';
+          '<img class="actu-post__brand-logo" src="ymmea-icon.png" alt="" width="32" height="32" loading="lazy" decoding="async">';
 
         function escapeHtml(str) {
           return String(str || "")
@@ -1290,8 +1290,7 @@
           try {
             return new Intl.DateTimeFormat("fr-FR", {
               day: "numeric",
-              month: "long",
-              year: "numeric"
+              month: "long"
             }).format(new Date(iso));
           } catch (e) {
             return "";
@@ -1302,64 +1301,39 @@
           return String(text || "").trim().length > PREVIEW_CHARS;
         }
 
-        function mediaSrc(item) {
-          return (item && (item.url || item.thumbnail)) || "";
+        function coverSrc(media) {
+          if (!media || !media.length) return "";
+          var video = media.find(function (m) { return m.type === "video"; });
+          if (video) return video.thumbnail || "";
+          var image = media.find(function (m) { return m.type === "image"; });
+          return (image && (image.url || image.thumbnail)) || "";
         }
 
-        function renderMedia(media, post) {
-          if (!media || !media.length) return "";
-          var videos = media.filter(function (m) { return m.type === "video"; });
-          var images = media.filter(function (m) {
-            return m.type === "image" && mediaSrc(m);
-          });
+        function renderCover(post) {
+          var media = post.media || [];
+          var video = media.find(function (m) { return m.type === "video"; });
+          var src = coverSrc(media);
+          var img = src
+            ? '<img src="' + escapeHtml(src) + '" alt="" loading="lazy" decoding="async">'
+            : '<span class="actu-post__media-fallback" aria-hidden="true"></span>';
 
-          if (videos.length) {
-            var video = videos[0];
+          if (video) {
             var embed = video.embedUrl || (post.urn
               ? "https://www.linkedin.com/embed/feed/update/" + encodeURIComponent(post.urn) + "?compact=1"
               : "");
-            var thumb = video.thumbnail || mediaSrc(images[0]) || "";
-            var href = escapeHtml(post.url || video.url || "https://www.linkedin.com/company/ymmea/");
-            var posterInner =
-              (thumb
-                ? '<img src="' + escapeHtml(thumb) + '" alt="" loading="lazy" decoding="async">'
-                : '<span class="actu-post__media-fallback" aria-hidden="true"></span>') +
-              '<span class="actu-post__play" aria-hidden="true"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4.5 2.8v10.4L13.2 8 4.5 2.8z"/></svg></span>';
-
             if (embed) {
               return (
-                '<div class="actu-post__media actu-post__media--cover">' +
-                  '<div class="actu-post__video-wrap" data-actu-video data-embed-src="' + escapeHtml(embed) + '">' +
-                    '<button class="actu-post__video-poster" type="button" data-actu-play aria-label="Lire la vidéo">' +
-                      posterInner +
-                    "</button>" +
-                  "</div>" +
+                '<div class="actu-post__cover" data-actu-video data-embed-src="' + escapeHtml(embed) + '">' +
+                  '<button class="actu-post__cover-btn" type="button" data-actu-play aria-label="Lire la vidéo">' +
+                    img +
+                    '<span class="actu-post__play" aria-hidden="true"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4.5 2.8v10.4L13.2 8 4.5 2.8z"/></svg></span>' +
+                  "</button>" +
                 "</div>"
               );
             }
-            return (
-              '<div class="actu-post__media actu-post__media--cover">' +
-                '<a class="actu-post__video-poster" href="' + href + '" target="_blank" rel="noopener noreferrer">' +
-                  posterInner +
-                "</a>" +
-              "</div>"
-            );
           }
 
-          if (!images.length) return "";
-          var countClass = images.length === 1 ? "" : " actu-post__media-grid--" + Math.min(images.length, 4);
-          var figures = images.slice(0, 4).map(function (img) {
-            return (
-              '<figure class="actu-post__figure">' +
-                '<img src="' + escapeHtml(mediaSrc(img)) + '" alt="" loading="lazy" decoding="async">' +
-              "</figure>"
-            );
-          }).join("");
-          return (
-            '<div class="actu-post__media actu-post__media--cover">' +
-              '<div class="actu-post__media-grid' + countClass + '">' + figures + "</div>" +
-            "</div>"
-          );
+          return '<div class="actu-post__cover">' + img + "</div>";
         }
 
         function renderPost(post, index) {
@@ -1367,30 +1341,27 @@
           var long = needsToggle(text);
           var postId = "actu-post-" + (post.id || index);
           var dateLabel = formatDate(post.publishedAt);
-          var sourceUrl = escapeHtml(post.url || "https://www.linkedin.com/company/ymmea/");
 
           return (
             '<article class="actu-post reveal' + (index ? " reveal-delay-" + Math.min(index, 3) : "") + '">' +
-              renderMedia(post.media, post) +
-              '<div class="actu-post__meta">' +
-                '<span class="actu-post__brand">' +
-                  '<span class="actu-post__brand-mark">' + ymmeaIcon + "</span>" +
-                  "YMMEA" +
-                "</span>" +
-                (dateLabel ? '<time class="actu-post__date" datetime="' + escapeHtml(post.publishedAt || "") + '">' + escapeHtml(dateLabel) + "</time>" : "") +
-              "</div>" +
+              renderCover(post) +
+              '<span class="actu-post__rule" aria-hidden="true"></span>' +
               '<div class="actu-post__body">' +
                 '<p class="actu-post__text" id="' + postId + '-text"' + (long ? ' data-collapsed="true"' : "") + ">" +
                   escapeHtml(text) +
                 "</p>" +
-                '<div class="actu-post__actions">' +
-                  (long
-                    ? '<button class="actu-post__toggle" type="button" aria-expanded="false" aria-controls="' + postId + '-text" data-actu-toggle>' +
-                        "Lire la suite" +
-                      "</button>"
+                (long
+                  ? '<button class="actu-post__toggle" type="button" aria-expanded="false" aria-controls="' + postId + '-text" data-actu-toggle>Lire la suite</button>'
+                  : "") +
+                '<footer class="actu-post__footer">' +
+                  '<span class="actu-post__brand">' +
+                    '<span class="actu-post__brand-mark">' + ymmeaIcon + "</span>" +
+                    "<span>YMMEA</span>" +
+                  "</span>" +
+                  (dateLabel
+                    ? '<time class="actu-post__date" datetime="' + escapeHtml(post.publishedAt || "") + '">' + escapeHtml(dateLabel) + "</time>"
                     : "") +
-                  '<a class="actu-post__source" href="' + sourceUrl + '" target="_blank" rel="noopener noreferrer">Ouvrir sur LinkedIn</a>' +
-                "</div>" +
+                "</footer>" +
               "</div>" +
             "</article>"
           );
@@ -1437,6 +1408,7 @@
               if (!wrap) return;
               var src = wrap.getAttribute("data-embed-src");
               if (!src) return;
+              wrap.classList.add("is-playing");
               wrap.innerHTML =
                 '<iframe src="' + escapeHtml(src) + '" title="Vidéo LinkedIn YMMEA" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture"></iframe>';
             });
