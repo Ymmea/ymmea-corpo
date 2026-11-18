@@ -2553,6 +2553,10 @@ body.spot-open {
 }
 
 /* Actualités LinkedIn */
+.actualites {
+  background: #ffffff;
+}
+
 .actualites__header {
   margin-bottom: clamp(2rem, 4vw, 2.75rem);
 }
