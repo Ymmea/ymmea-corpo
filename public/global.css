@@ -2586,9 +2586,21 @@ body.spot-open {
 }
 
 .actualites__list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.35rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 720px) {
+  .actualites__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .actualites__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .actualites__loading,
@@ -2598,6 +2610,7 @@ body.spot-open {
   padding: 1.5rem 0;
   font-size: 0.9375rem;
   color: var(--text-muted);
+  grid-column: 1 / -1;
 }
 
 .actualites__error {
@@ -2605,6 +2618,9 @@ body.spot-open {
 }
 
 .actu-post {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
   overflow: hidden;
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 1.25rem;
@@ -2619,13 +2635,13 @@ body.spot-open {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 0.85rem;
-  padding: 1.15rem 1.35rem 0;
+  padding: 0.95rem 1.1rem 0;
 }
 
 .actu-post__brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.5rem;
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -2637,35 +2653,42 @@ body.spot-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.65rem;
-  height: 1.65rem;
+  width: 1.75rem;
+  height: 1.75rem;
   border-radius: 0.4rem;
-  background: var(--ymmea-gradient);
-  color: #fff;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--border-soft);
+  flex-shrink: 0;
 }
 
-.actu-post__brand-mark svg {
-  width: 0.85rem;
-  height: 0.85rem;
+.actu-post__brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0.15rem;
 }
 
 .actu-post__date {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 300;
   color: var(--text-muted);
 }
 
 .actu-post__media {
-  margin: 1rem 1.35rem 0;
-  border-radius: var(--radius-md);
+  margin: 0;
   overflow: hidden;
   background: var(--bg-muted);
-  border: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.actu-post__media--cover {
+  width: 100%;
 }
 
 .actu-post__media-grid {
   display: grid;
-  gap: 0.35rem;
+  gap: 0.2rem;
 }
 
 .actu-post__media-grid--2 {
@@ -2692,7 +2715,7 @@ body.spot-open {
 
 .actu-post__video-wrap {
   position: relative;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 10;
   background: var(--accent-deep);
 }
 
@@ -2708,7 +2731,7 @@ body.spot-open {
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   color: inherit;
   cursor: pointer;
@@ -2717,10 +2740,18 @@ body.spot-open {
   background: var(--accent-deep);
 }
 
-.actu-post__video-poster img {
+.actu-post__video-poster img,
+.actu-post__media-fallback {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.actu-post__media-fallback {
+  display: block;
+  background:
+    linear-gradient(145deg, rgba(59, 130, 246, 0.35), rgba(12, 30, 61, 0.9)),
+    var(--accent-deep);
 }
 
 .actu-post__play {
@@ -2751,14 +2782,17 @@ body.spot-open {
 }
 
 .actu-post__body {
-  padding: 1.15rem 1.35rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0.85rem 1.1rem 1.15rem;
 }
 
 .actu-post__text {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 300;
-  line-height: 1.75;
+  line-height: 1.65;
   color: var(--text-secondary);
   white-space: pre-wrap;
 }
@@ -2766,7 +2800,7 @@ body.spot-open {
 .actu-post__text[data-collapsed="true"] {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 5;
   overflow: hidden;
   white-space: normal;
 }
@@ -2775,8 +2809,9 @@ body.spot-open {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem 1.25rem;
-  margin-top: 1rem;
+  gap: 0.65rem 1rem;
+  margin-top: auto;
+  padding-top: 0.9rem;
 }
 
 .actu-post__toggle {
@@ -2820,19 +2855,9 @@ body.spot-open {
 }
 
 @media (max-width: 640px) {
-  .actu-post__media {
-    margin-inline: 0.85rem;
-  }
-
   .actu-post__meta,
   .actu-post__body {
     padding-inline: 1rem;
-  }
-
-  .actu-post__media-grid--2,
-  .actu-post__media-grid--3,
-  .actu-post__media-grid--4 {
-    grid-template-columns: 1fr;
   }
 }
 
