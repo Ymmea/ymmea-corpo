@@ -1,0 +1,75 @@
+name: Mise a jour Actualites LinkedIn
+
+# 100% gratuit : RSSHub auto-heberge dans Actions (aucun abonnement RSS.app / widget).
+# Declenchement : tous les jours a 07:00 UTC + manuel
+on:
+  schedule:
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-actualites-update
+  cancel-in-progress: false
+
+jobs:
+  update-actualites:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout du depot
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Demarrer RSSHub (Docker, gratuit)
+        run: |
+          docker run -d --name rsshub -p 1200:1200 \
+            -e NODE_ENV=production \
+            -e CACHE_TYPE=memory \
+            -e CACHE_EXPIRE=300 \
+            diygod/rsshub:chromium-bundled
+
+          echo "Attente du demarrage RSSHub…"
+          for i in $(seq 1 40); do
+            if curl -fsS "http://127.0.0.1:1200/" >/dev/null 2>&1; then
+              echo "RSSHub pret (tentative $i)."
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "RSSHub n'a pas repondu a temps."
+          docker logs rsshub || true
+          exit 1
+
+      - name: Generer actualites.json depuis LinkedIn (lecture seule)
+        working-directory: automation
+        env:
+          LINKEDIN_RSS_URL: http://127.0.0.1:1200/linkedin/company/ymmea/posts
+        run: node update-actualites.mjs
+
+      - name: Valider actualites.json
+        working-directory: automation
+        run: node validate-actualites.mjs
+
+      - name: Arreter RSSHub
+        if: always()
+        run: docker rm -f rsshub || true
+
+      - name: Commiter et pousser si changement
+        run: |
+          git config user.name "ymmea-content-bot"
+          git config user.email "bot@ymmea.com"
+          if git diff --quiet -- public/data/actualites.json; then
+            echo "Aucun changement d'actualites, rien a publier."
+            exit 0
+          fi
+          git add public/data/actualites.json
+          git commit -m "chore(actualites): mise a jour automatique du fil LinkedIn YMMEA"
+          git push

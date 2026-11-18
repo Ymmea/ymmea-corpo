@@ -1,0 +1,64 @@
+name: Mise a jour FAQ hebdomadaire
+
+# Declenchement : tous les lundis a 06:00 UTC (08:00 Paris l'ete, 07:00 l'hiver)
+# + declenchement manuel possible depuis l'onglet Actions.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+# Permet au job de pousser le commit sur la branche.
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-faq-update
+  cancel-in-progress: false
+
+jobs:
+  update-faq:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout du depot
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Installer le CLI cursor-agent (runtime local du SDK)
+        run: |
+          curl https://cursor.com/install -fsS | bash
+          echo "$HOME/.cursor/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Installer les dependances de l'automation
+        working-directory: automation
+        run: npm install --no-audit --no-fund
+
+      - name: Generer la nouvelle FAQ (agent Cursor)
+        working-directory: automation
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          # Optionnel : forcer un modele precis via un secret/variable.
+          CURSOR_MODEL: ${{ vars.CURSOR_MODEL }}
+        run: node update-faq.mjs
+
+      - name: Valider la FAQ (garde-fou avant publication)
+        working-directory: automation
+        run: node validate-faq.mjs
+
+      - name: Commiter et pousser si changement
+        run: |
+          git config user.name "ymmea-content-bot"
+          git config user.email "bot@ymmea.com"
+          if git diff --quiet -- public/index.html; then
+            echo "Aucun changement de contenu, rien a publier."
+            exit 0
+          fi
+          git add public/index.html
+          git commit -m "chore(faq): mise a jour hebdomadaire automatique du contenu SEO"
+          git push

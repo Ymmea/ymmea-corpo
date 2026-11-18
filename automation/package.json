@@ -1,0 +1,19 @@
+{
+  "name": "ymmea-content-automation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Automation contenu YMMEA : FAQ SEO (Cursor SDK) + actualites LinkedIn (RSS lecture seule).",
+  "scripts": {
+    "update:faq": "node update-faq.mjs",
+    "validate:faq": "node validate-faq.mjs",
+    "update:actualites": "node update-actualites.mjs",
+    "validate:actualites": "node validate-actualites.mjs"
+  },
+  "dependencies": {
+    "@cursor/sdk": "^1.0.22"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
