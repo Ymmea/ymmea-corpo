@@ -1360,10 +1360,6 @@ body.spot-open {
   transition: filter 0.5s var(--ease), transform 0.5s var(--ease), box-shadow 0.35s var(--ease);
 }
 
-.profile-card__avatar--romain {
-  object-position: center 20%;
-}
-
 .profile-card:hover .profile-card__avatar {
   filter: grayscale(0%) contrast(1);
   transform: scale(1.04);
